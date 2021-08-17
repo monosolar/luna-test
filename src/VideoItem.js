@@ -5,10 +5,13 @@ const useStyles = createUseStyles({
   VideoItem: {
     background: 'aqua',
     width: 100,
-    height: 100,
+    height: '100%',
 
     position: 'absolute',
     left: 30,
+
+
+    border: '3px dashed',
   },
 })
 
