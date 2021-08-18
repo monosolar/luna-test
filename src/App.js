@@ -7,7 +7,6 @@ const useStyles = createUseStyles({
   Present: {
     background: 'linear-gradient(#5C527F, #3E2C41)',
     height: '20rem',
- 
   },
   Timeline: {
     backgroundColor: '#6E85B2',
@@ -30,14 +29,18 @@ const App = () => {
   const classes = useStyles()
   const [items, setItems] = useState([])
 
-  const handleDrop = useCallback(files => {
-    const newItems = files.map(file => ({
-      id: new Date().getTime(),
-      url: URL.createObjectURL(file),
-    }))
+  const handleDrop = useCallback(
+    files => {
+      const newItems = files.map(file => ({
+        id: new Date().getTime(),
+        url: URL.createObjectURL(file),
+        name: file?.name || 'unknown',
+      }))
 
-    setItems([...items, ...newItems])
-  }, [])
+      setItems([...items, ...newItems])
+    },
+    [items]
+  )
 
   return (
     <>
@@ -48,8 +51,8 @@ const App = () => {
         </div>
         <div className={classes.Timeline}>
           <div>
-            {items.map(({ id, url }) => (
-              <VideoItem url={url} key={id} />
+            {items.map(({ id, url, name }) => (
+              <VideoItem name={name} url={url} key={id} />
             ))}
           </div>
         </div>

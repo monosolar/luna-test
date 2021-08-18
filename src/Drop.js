@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { createUseStyles } from 'react-jss'
 import { useDropzone } from 'react-dropzone'
 import classnames from 'classnames'
@@ -17,7 +17,6 @@ const useStyles = createUseStyles({
 
     border: '10px dashed',
     borderCollapse: 'separate',
-    borderSpacing: '100px',
     boxSizing: 'border-box',
 
     opacity: 0,

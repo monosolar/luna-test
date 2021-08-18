@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
     height: '100%',
   },
   Storyboard_Canvas: {
-    //display: 'none',
+    
   },
 })
 
