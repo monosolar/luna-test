@@ -1,33 +1,25 @@
 import React, { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
+import Storyboard from './Storyboard'
 
 const useStyles = createUseStyles({
   VideoItem: {
     background: 'aqua',
-    width: 100,
+
     height: '100%',
 
     position: 'absolute',
     left: 30,
 
-
     border: '3px dashed',
+    boxSizing: 'border-box',
   },
 })
 
-const VideoItem = () => {
+const VideoItem = ({ url }) => {
   const classes = useStyles()
   const thisRef = useRef(null)
   const coordinates = useRef({ deltaOffset: null })
-
-  const moveAt = e => {
-    if (coordinates.current.deltaOffset && thisRef && thisRef.current) {
-      const offsetLeft =
-        e.pageX - e.target.parentElement.offsetLeft - coordinates.current.deltaOffset
-
-      thisRef.current.style.left = `${offsetLeft}px`
-    }
-  }
 
   const handleMouseDown = e => {
     const targetLeftOffset = e.target.offsetLeft
@@ -40,19 +32,27 @@ const VideoItem = () => {
   }
 
   const handleMouseMove = e => {
-    moveAt(e)
+    if (coordinates.current.deltaOffset && thisRef && thisRef.current) {
+      const offsetLeft = e.pageX - coordinates.current.deltaOffset
+
+      if (offsetLeft > 0) {
+        thisRef.current.style.left = `${offsetLeft}px`
+      }
+    }
   }
 
   return (
-    <div
-      ref={thisRef}
-      className={classes.VideoItem}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-    >
-      AAA
-    </div>
+    <>
+      <div
+        ref={thisRef}
+        className={classes.VideoItem}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+      >
+        <Storyboard url={url} />
+      </div>
+    </>
   )
 }
 
