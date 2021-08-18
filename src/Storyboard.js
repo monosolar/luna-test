@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
     height: '100%',
   },
   Storyboard_Canvas: {
-    
+    height: '100%'
   },
 })
 
@@ -39,15 +39,14 @@ const Storyboard = ({ url }) => {
   const handleLoadedData = e => {
     const video = videoRef.current
     const canvas = canvasRef.current
-    const parentHeight = e.target.parentElement.getBoundingClientRect().height //e.target.parentElement.offsetHeight
     console.log(
       '----->',
       'e.target.parentElement',
       e.target.parentElement.getBoundingClientRect()
     )
     canvas.width = video.duration * 50
-    canvas.height = parentHeight - 6
-    const scaleValue = parentHeight / video.videoHeight
+    console.log('----->', 'canvas.height', canvas.height)
+    const scaleValue = canvas.height / video.videoHeight
 
     var ctx = canvas.getContext('2d')
     ctx.scale(scaleValue, scaleValue)
@@ -64,7 +63,7 @@ const Storyboard = ({ url }) => {
 
   return (
     <>
-      <canvas ref={canvasRef} className={classes.Storyboard_Canvas} />
+      <canvas ref={canvasRef} className={classes.Storyboard_Canvas}/>
       <video
         className={classes.Storyboard_Video}
         ref={videoRef}
