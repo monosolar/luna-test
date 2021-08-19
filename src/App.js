@@ -29,14 +29,12 @@ const useStyles = createUseStyles({
   Timeline: {
     backgroundColor: '#5C527F',
     position: 'relative',
-    height: '10rem',
-    overflowX: 'auto',
+    overflowX: 'scroll',
     overflowY: 'hidden',
   },
   Timeline_Content: {
-    // paddingTop: '1rem',
-    // paddingBottom: '1rem',
-      height: '100%',
+    position: 'relative',
+    height: '10rem',
   },
   Timeline_Scale: {
     '& time': {
@@ -54,6 +52,7 @@ const useStyles = createUseStyles({
 const App = () => {
   const classes = useStyles()
   const [items, setItems] = useState([])
+  const videoRef = useRef(null)
 
   const handleDrop = useCallback(
     files => {
@@ -70,13 +69,32 @@ const App = () => {
 
   return (
     <>
+      <div
+        onClick={() => {
+          console.log('----->', videoRef.current, items[0].url)
+          videoRef.current.src = items[0].url
+          videoRef.current.play()
+        }}
+      >
+        <PlayIcon className={classes.PlaybackButton} />
+      </div>
+      <div
+        onClick={() => {
+          console.log('----->', videoRef.current, items[0].url)
+          videoRef.current.src = items[1].url
+          videoRef.current.play()
+        }}
+      >
+        <PlayIcon className={classes.PlaybackButton} />
+      </div>
       <div className={classes.App}>
         <div className={classes.Present}>
           <Drop onDrop={handleDrop} />
           <video
-            controls=''
+            controls={true}
+            crossOrigin='anonymous'
             className={classes.Present_Video}
-            src='https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4'
+            ref={videoRef}
             poster='https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217'
             width='620'
           >
@@ -84,7 +102,6 @@ const App = () => {
             <a href='https://archive.org/details/BigBuckBunny_124'>download it</a>
             and watch it with your favorite video player!
           </video>
-          <PlayIcon className={classes.PlaybackButton} />
         </div>
         <div className={classes.Timeline}>
           <div className={classes.Timeline_Scale}>

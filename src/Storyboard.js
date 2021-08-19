@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
@@ -7,7 +7,11 @@ const useStyles = createUseStyles({
     height: '100%',
   },
   Storyboard_Canvas: {
-    height: '100%'
+    display: 'none',
+    height: '100%',
+  },
+  Storyboard_Image: {
+    height: '100%',
   },
 })
 
@@ -16,15 +20,20 @@ const Storyboard = ({ url }) => {
   const canvasRef = useRef(null)
   const videoRef = useRef(null)
 
+  const [images, setImages] = useState([])
+
   const handleSeeked = () => {
     const canvas = canvasRef.current
     const video = videoRef.current
 
-    canvas
-      .getContext('2d')
-      .drawImage(video, (video.videoWidth / 2 + 10) * video.currentTime, 0)
+    const ctx = canvas.getContext('2d')
+    // ctx.scale(scaleValue, scaleValue)
+    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+    ctx.scale(0.2, 0.2)
 
-    console.log('----->', 'onTimeUpdate', video.currentTime, video.duration)
+    const img = new Image()
+    img.src = canvas.toDataURL('image/png')
+    setImages([...images, canvas.toDataURL('image/png')])
 
     if (video.currentTime < video.duration) {
       setCurrentTime(video.currentTime + 1)
@@ -39,31 +48,18 @@ const Storyboard = ({ url }) => {
   const handleLoadedData = e => {
     const video = videoRef.current
     const canvas = canvasRef.current
-    console.log(
-      '----->',
-      'e.target.parentElement',
-      e.target.parentElement.getBoundingClientRect()
-    )
-    canvas.width = video.duration * 50
-    console.log('----->', 'canvas.height', canvas.height)
-    const scaleValue = canvas.height / video.videoHeight
 
-    var ctx = canvas.getContext('2d')
-    ctx.scale(scaleValue, scaleValue)
-    console.log(
-      '----->',
-      'onLoadedData',
-      video.height,
-      video.videoHeight,
-      e.target.parentElement.offsetHeight
-    )
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+
+    console.log('----->', 'onLoadedData', canvas.width)
 
     setCurrentTime(0)
   }
 
   return (
     <>
-      <canvas ref={canvasRef} className={classes.Storyboard_Canvas}/>
+      <canvas ref={canvasRef} className={classes.Storyboard_Canvas} />
       <video
         className={classes.Storyboard_Video}
         ref={videoRef}
@@ -72,6 +68,46 @@ const Storyboard = ({ url }) => {
         crossOrigin='anonymous'
         src={url}
       />
+      {images.map(image => (
+        <img className={classes.Storyboard_Image} src={image} key={image} />
+      ))}
+
+      {/* <img
+        className={classes.Storyboard_Image}
+        src={
+          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
+        }
+      />
+      <img
+        className={classes.Storyboard_Image}
+        src={
+          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
+        }
+      />
+      <img
+        className={classes.Storyboard_Image}
+        src={
+          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
+        }
+      />
+      <img
+        className={classes.Storyboard_Image}
+        src={
+          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
+        }
+      />
+      <img
+        className={classes.Storyboard_Image}
+        src={
+          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
+        }
+      />
+      <img
+        className={classes.Storyboard_Image}
+        src={
+          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
+        }
+      /> */}
     </>
   )
 }

@@ -3,20 +3,32 @@ import { createUseStyles } from 'react-jss'
 import Storyboard from './Storyboard'
 
 const useStyles = createUseStyles(() => {
-  const borderRadius = '1rem'
+  const borderRadius = '.5rem'
 
   return {
     VideoItem: {
-      
-      height: '100%',
       position: 'absolute',
+      top: '1rem',
+      bottom: '1rem',
 
-      border: '3px dashed #261C2C',
+      background: '#261C2C',
+   
       boxSizing: 'border-box',
       borderRadius,
       '& canvas': {
         borderRadius,
       },
+      padding: '.75rem',
+
+      display: 'flex',
+      justifyContent: 'space-between',
+
+      '-webkit-touch-callout': 'none',
+      '-webkit-user-select': 'none',
+      '-khtml-user-select': 'none',
+      '-moz-user-select': 'none',
+      '-ms-user-select': 'none',
+      'user-select': 'none',
     },
 
     VideoItem_Curtain: {
