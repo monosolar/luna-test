@@ -23,7 +23,6 @@ const useStyles = createUseStyles(() => {
       position: 'absolute',
       top: 0,
       bottom: 0,
-      left: 190,
     },
     Slider_Triangle: {
       width: '0',
@@ -48,7 +47,7 @@ const useStyles = createUseStyles(() => {
 const Slider = () => {
   const classes = useStyles()
   const thisRef = useRef(null)
-  const { currentTime } = useContext(AppContext)
+  const { duration, currentTime } = useContext(AppContext)
 
   useEffect(() => {
     if (thisRef.current) {
@@ -56,34 +55,26 @@ const Slider = () => {
     }
   }, [currentTime])
 
-  return (
+  return duration ? (
     <div className={classes.Slider} ref={thisRef}>
       <div className={classes.Slider_Triangle}></div>
       <div className={classes.Slider_Vertical}></div>
     </div>
+  ) : (
+    false
   )
 }
 
 const Timeline = () => {
   const classes = useStyles()
   const thisRef = useRef(null)
-  const { items, setDuration } = useContext(AppContext)
+  const { items } = useContext(AppContext)
 
   return (
     <div className={classes.Timeline} ref={thisRef}>
       <div className={classes.Timeline_Content}>
         {items.map(({ id, url, name }, idx) => (
-          <VideoItem
-            key={id}
-            name={name}
-            url={url}
-            initLeft={`${idx * 5}rem`}
-            onMove={() => {
-              setDuration(thisRef.current.scrollWidth / PIXELS_PER_SECOND)
-
-              console.log('----->', 'thisRef', thisRef.current.scrollWidth)
-            }}
-          />
+          <VideoItem id={id} key={id} name={name} url={url} initLeft={`${idx * 5}rem`} />
         ))}
       </div>
       <Slider />

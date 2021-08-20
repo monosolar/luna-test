@@ -39,7 +39,7 @@ const Drop = () => {
   const handleDrop = useCallback(
     files => {
       const newItems = files.map(file => ({
-        id: new Date().getTime(),
+        id: `${new Date().getTime()}`,
         url: URL.createObjectURL(file),
         name: file?.name || 'unknown',
       }))

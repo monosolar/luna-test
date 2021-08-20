@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
   Player: {
     position: 'relative',
     background: 'linear-gradient(#5C527F, #3E2C41)',
-    height: '40rem',
+    minHeight: '40rem',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -21,22 +21,27 @@ const useStyles = createUseStyles({
 const Player = () => {
   const classes = useStyles()
   const videoRef = useRef(null)
-  const { setIsPlaying, isPlaying, duration } = useContext(AppContext)
+  const { setIsPlaying, isPlaying, duration, curentUrl } = useContext(AppContext)
 
   return (
     <div className={classes.Player}>
       <video
-        controls={true}
         crossOrigin='anonymous'
         className={classes.Player_Video}
         ref={videoRef}
         poster='https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217'
-        width='620'
+        src={curentUrl}
+        autoPlay={true}
       />
       <ControllButton
         disabled={duration === 0}
         isPlaying={isPlaying}
         onClick={() => {
+          if (isPlaying) {
+            videoRef.current.pause()
+          } else {
+            videoRef.current.play()
+          }
           setIsPlaying(!isPlaying)
         }}
       />

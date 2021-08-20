@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import { AppContext } from 'AppProvider'
+import React, { useContext, useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
+import { getRectRelativeToParent } from 'utils'
 import { PIXELS_PER_SECOND } from './consts'
 import Storyboard from './Storyboard'
 
@@ -50,12 +52,11 @@ const useStyles = createUseStyles(() => {
   }
 })
 
-const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
+const VideoItem = ({ id, name, url, initLeft = 0 }) => {
   const classes = useStyles({ initLeft })
   const thisRef = useRef(null)
   const coordinates = useRef({ deltaOffset: null })
-
-  useEffect(() => {}, [url, onMove])
+  const { setRect: setContextRect } = useContext(AppContext)
 
   const handleMouseDown = e => {
     const targetLeftOffset = e.target.offsetLeft
@@ -64,8 +65,9 @@ const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
   }
 
   const handleMouseOut = () => {
+    setRect()
+
     coordinates.current.deltaOffset = null
-    onMove()
   }
 
   const handleMouseMove = e => {
@@ -79,9 +81,19 @@ const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
   }
 
   const handleDuration = duration => {
-    console.log('----->', 'duration--', duration)
     thisRef.current.style.width = `${duration * PIXELS_PER_SECOND}px`
-    onMove()
+
+    setRect()
+  }
+
+  const setRect = () => {
+    const parentElement = thisRef.current.parentElement
+    const resultRect = getRectRelativeToParent(
+      thisRef.current.getBoundingClientRect(),
+      parentElement.getBoundingClientRect()
+    )
+
+    setContextRect(id, resultRect)
   }
 
   return (
