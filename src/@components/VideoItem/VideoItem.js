@@ -1,9 +1,10 @@
-import { AppContext } from 'AppProvider'
+
+import { AppContext } from '@components/App/AppProvider'
 import React, { useContext, useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import { getRectRelativeToParent } from 'utils'
-import { PIXELS_PER_SECOND } from './consts'
-import Storyboard from './Storyboard'
+import { PIXELS_PER_SECOND } from '../../consts'
+import Storyboard from '../../Storyboard'
 
 const useStyles = createUseStyles(() => {
   const borderRadius = '.5rem'

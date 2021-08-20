@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { createUseStyles } from 'react-jss'
+import Drop from '../../Drop'
+import Player from '../../Player'
+import Timeline from '../../Timeline'
 import AppProvider from './AppProvider'
-import Drop from './Drop'
-import Player from './Player'
-import Timeline from './Timeline'
 
 const useStyles = createUseStyles({
   App: {

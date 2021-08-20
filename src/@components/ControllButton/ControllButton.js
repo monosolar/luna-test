@@ -1,8 +1,8 @@
 import classnames from 'classnames'
 import React from 'react'
 import { createUseStyles } from 'react-jss'
-import { ReactComponent as PlayIcon } from './play.svg'
-import { ReactComponent as StopIcon } from './stop.svg'
+import { ReactComponent as PlayIcon } from '@assets/icons/play.svg'
+import { ReactComponent as StopIcon } from '@assets/icons/play.svg'
 
 const useStyles = createUseStyles({
   ControllButton: {

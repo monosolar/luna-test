@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useDropzone } from 'react-dropzone'
 import classnames from 'classnames'
-import { AppContext } from './AppProvider'
+import { AppContext } from '@components/App/AppProvider'
 
 const useStyles = createUseStyles({
   Drop: {
@@ -43,10 +43,9 @@ const Drop = () => {
         url: URL.createObjectURL(file),
         name: file?.name || 'unknown',
       }))
-      console.log('----->', 'files', files)
       setItems([...items, ...newItems])
     },
-    [items]
+    [setItems, items]
   )
 
   const { getRootProps, getInputProps } = useDropzone({

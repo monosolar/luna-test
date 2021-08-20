@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
-import { AppContext } from './AppProvider'
-import ControllButton from './ControllButton'
+import { AppContext } from '@components/App/AppProvider'
+import ControllButton from '@components/ControllButton'
 
 const useStyles = createUseStyles({
   Player: {

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
-import { AppContext } from './AppProvider'
+import { AppContext } from '@components/App/AppProvider'
 
 import { PIXELS_PER_SECOND } from './consts'
 
-import VideoItem from './VideoItem'
+import VideoItem from '@components/VideoItem'
 
 const useStyles = createUseStyles(() => {
   return {
