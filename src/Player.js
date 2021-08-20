@@ -32,6 +32,7 @@ const Player = () => {
         poster='https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217'
         src={curentUrl}
         autoPlay={true}
+        controls={true}
       />
       <ControllButton
         disabled={duration === 0}

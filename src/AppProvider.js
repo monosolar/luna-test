@@ -1,9 +1,9 @@
 import { PIXELS_PER_SECOND } from 'consts'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 export const AppContext = React.createContext()
 
-const TICK_STEP = 0.01
+const TICK_STEP = 0.1
 
 const AppProvider = ({ children }) => {
   const [currentTime, setCurrentTime] = useState(0)
@@ -38,7 +38,7 @@ const AppProvider = ({ children }) => {
     setDuration(maxDuration)
   }
 
-  const getUrlToPlay = () => {
+  const getUrlToPlay = useCallback(() => {
     const {
       current: { videoItemsRects },
     } = dataRef
@@ -49,7 +49,7 @@ const AppProvider = ({ children }) => {
         .pop() || ''
 
     return items.find(item => item.id === lastPassedId)?.url || ''
-  }
+  }, [currentTime, items])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,9 +57,8 @@ const AppProvider = ({ children }) => {
         setCurrentTime(currentTime + TICK_STEP)
 
         setCurentUrl(getUrlToPlay())
-        console.log('----->', 'tick', currentTime)
 
-        if (currentTime > duration) {
+        if (currentTime + 0.5 > duration) {
           setCurrentTime(0)
         }
       }
