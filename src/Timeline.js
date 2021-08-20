@@ -1,6 +1,9 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useResizeDetector } from 'react-resize-detector'
+import AppContext from './AppContext'
+import { PIXELS_PER_SECOND } from './consts'
+
 import Storyboard from './Storyboard'
 import VideoItem from './VideoItem'
 
@@ -64,6 +67,7 @@ const Slider = () => {
 const Timeline = ({ items }) => {
   const classes = useStyles()
   const thisRef = useRef(null)
+  const { setDuration } = useContext(AppContext)
 
   return (
     <div className={classes.Timeline} ref={thisRef}>
@@ -82,11 +86,9 @@ const Timeline = ({ items }) => {
             url={url}
             initLeft={`${idx * 5}rem`}
             onMove={() => {
-              console.log(
-                '----->',
-                'thisRef',
-                thisRef.current.scrollWidth,
-              )
+              setDuration(thisRef.current.scrollWidth / PIXELS_PER_SECOND)
+
+              console.log('----->', 'thisRef', thisRef.current.scrollWidth)
             }}
           />
         ))}

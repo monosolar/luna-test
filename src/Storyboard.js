@@ -15,7 +15,7 @@ const useStyles = createUseStyles({
   },
 })
 
-const Storyboard = ({ url }) => {
+const Storyboard = ({ url, onDuration = () => {} }) => {
   const classes = useStyles()
   const canvasRef = useRef(null)
   const videoRef = useRef(null)
@@ -50,13 +50,12 @@ const Storyboard = ({ url }) => {
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
 
-    console.log('----->', 'onLoadedData', )
+    console.log('----->', 'onLoadedData')
     const ratio = video.videoWidth / video.videoHeight
-
 
     // 128 + 50
     mutableDataRef.current.videoStep = 2
-
+    onDuration(video.duration)
     setCurrentTime(0)
   }
 
@@ -71,9 +70,9 @@ const Storyboard = ({ url }) => {
         crossOrigin='anonymous'
         src={url}
       />
-      {images.map(image => (
+      {/* {images.map(image => (
         <img className={classes.Storyboard_Image} src={image} key={image} />
-      ))}
+      ))} */}
     </>
   )
 }

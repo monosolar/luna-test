@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import Storyboard from './Storyboard'
 
@@ -54,6 +54,8 @@ const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
   const thisRef = useRef(null)
   const coordinates = useRef({ deltaOffset: null })
 
+  useEffect(() => {}, [url, onMove])
+
   const handleMouseDown = e => {
     const targetLeftOffset = e.target.offsetLeft
     const offsetLeft = e.pageX - e.target.parentElement.offsetLeft
@@ -71,10 +73,13 @@ const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
 
       if (offsetLeft > 0) {
         thisRef.current.style.left = `${offsetLeft}px`
-       
       }
+    }
+  }
 
-      }
+  const handleDuration = (duration) => {
+    thisRef.current.style.width = `${duration * 100}px`
+    onMove()
   }
 
   return (
@@ -87,7 +92,7 @@ const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
         onMouseUp={handleMouseOut}
         onMouseMove={handleMouseMove}
       >
-        <Storyboard url={url} />
+        <Storyboard url={url} onDuration={handleDuration} />
         <div className={classes.VideoItem_Curtain}></div>
         <div className={classes.VideoItem_Name}>{name}</div>
       </div>
