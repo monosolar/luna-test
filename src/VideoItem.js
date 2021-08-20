@@ -10,14 +10,12 @@ const useStyles = createUseStyles(() => {
       position: 'absolute',
       top: '1rem',
       bottom: '1rem',
-
+      left: ({ initLeft }) => initLeft,
       background: '#261C2C',
-   
+
       boxSizing: 'border-box',
       borderRadius,
-      '& canvas': {
-        borderRadius,
-      },
+
       padding: '.75rem',
 
       display: 'flex',
@@ -40,7 +38,7 @@ const useStyles = createUseStyles(() => {
       left: 0,
       borderRadius,
       background: `linear-gradient(90deg, white 0, transparent 10rem, transparent 100%),
-                    linear-gradient(270deg, white 0, transparent 10rem, transparent 100%)`,
+                   linear-gradient(270deg, white 0, transparent 10rem, transparent 100%)`,
     },
 
     VideoItem_Name: {
@@ -51,8 +49,8 @@ const useStyles = createUseStyles(() => {
   }
 })
 
-const VideoItem = ({ name, url }) => {
-  const classes = useStyles({ name })
+const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
+  const classes = useStyles({ initLeft })
   const thisRef = useRef(null)
   const coordinates = useRef({ deltaOffset: null })
 
@@ -62,8 +60,9 @@ const VideoItem = ({ name, url }) => {
     coordinates.current.deltaOffset = offsetLeft - targetLeftOffset
   }
 
-  const handleMouseUp = () => {
+  const handleMouseOut = () => {
     coordinates.current.deltaOffset = null
+    onMove()
   }
 
   const handleMouseMove = e => {
@@ -72,8 +71,10 @@ const VideoItem = ({ name, url }) => {
 
       if (offsetLeft > 0) {
         thisRef.current.style.left = `${offsetLeft}px`
+       
       }
-    }
+
+      }
   }
 
   return (
@@ -82,7 +83,8 @@ const VideoItem = ({ name, url }) => {
         ref={thisRef}
         className={classes.VideoItem}
         onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseOut}
+        onMouseUp={handleMouseOut}
         onMouseMove={handleMouseMove}
       >
         <Storyboard url={url} />

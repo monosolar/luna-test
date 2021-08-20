@@ -19,6 +19,7 @@ const Storyboard = ({ url }) => {
   const classes = useStyles()
   const canvasRef = useRef(null)
   const videoRef = useRef(null)
+  const mutableDataRef = useRef({ videoStep: 1 })
 
   const [images, setImages] = useState([])
 
@@ -27,16 +28,13 @@ const Storyboard = ({ url }) => {
     const video = videoRef.current
 
     const ctx = canvas.getContext('2d')
-    // ctx.scale(scaleValue, scaleValue)
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
-    ctx.scale(0.2, 0.2)
 
-    const img = new Image()
-    img.src = canvas.toDataURL('image/png')
+    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+
     setImages([...images, canvas.toDataURL('image/png')])
 
     if (video.currentTime < video.duration) {
-      setCurrentTime(video.currentTime + 1)
+      setCurrentTime(video.currentTime + mutableDataRef.current.videoStep)
     }
   }
   const setCurrentTime = value => {
@@ -45,14 +43,19 @@ const Storyboard = ({ url }) => {
     video.currentTime = value
   }
 
-  const handleLoadedData = e => {
+  const handleLoadedData = () => {
     const video = videoRef.current
     const canvas = canvasRef.current
 
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
 
-    console.log('----->', 'onLoadedData', canvas.width)
+    console.log('----->', 'onLoadedData', )
+    const ratio = video.videoWidth / video.videoHeight
+
+
+    // 128 + 50
+    mutableDataRef.current.videoStep = 2
 
     setCurrentTime(0)
   }
@@ -71,43 +74,6 @@ const Storyboard = ({ url }) => {
       {images.map(image => (
         <img className={classes.Storyboard_Image} src={image} key={image} />
       ))}
-
-      {/* <img
-        className={classes.Storyboard_Image}
-        src={
-          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
-        }
-      />
-      <img
-        className={classes.Storyboard_Image}
-        src={
-          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
-        }
-      />
-      <img
-        className={classes.Storyboard_Image}
-        src={
-          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
-        }
-      />
-      <img
-        className={classes.Storyboard_Image}
-        src={
-          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
-        }
-      />
-      <img
-        className={classes.Storyboard_Image}
-        src={
-          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
-        }
-      />
-      <img
-        className={classes.Storyboard_Image}
-        src={
-          'https://media.smallbiztrends.com/2021/07/JYGjERiM-streamline-invoicing-400x224.jpg'
-        }
-      /> */}
     </>
   )
 }

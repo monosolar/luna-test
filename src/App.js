@@ -1,11 +1,19 @@
-import React, { createContext, useCallback, useRef, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { createUseStyles } from 'react-jss'
 import Drop from './Drop'
 import VideoItem from './VideoItem'
 import { ReactComponent as PlayIcon } from './play.svg'
+import Timeline from './Timeline'
 
 const useStyles = createUseStyles({
   Present: {
+    position: 'relative',
     background: 'linear-gradient(#5C527F, #3E2C41)',
     height: '40rem',
     display: 'flex',
@@ -14,33 +22,19 @@ const useStyles = createUseStyles({
     alignItems: 'center',
   },
   Present_Video: {
-    height: '100%',
+    width: '100%',
   },
 
   PlaybackButton: {
-    width: '8rem',
-    height: '8rem',
+    cursor: 'pointer',
+    width: '2rem',
+    height: '2rem',
     '& path': {
       fill: '#6E85B2',
     },
     margin: '1rem',
   },
 
-  Timeline: {
-    backgroundColor: '#5C527F',
-    position: 'relative',
-    overflowX: 'scroll',
-    overflowY: 'hidden',
-  },
-  Timeline_Content: {
-    position: 'relative',
-    height: '10rem',
-  },
-  Timeline_Scale: {
-    '& time': {
-      marginRight: '1rem',
-    },
-  },
   App: {
     maxWidth: '70rem',
     width: '100%',
@@ -61,7 +55,7 @@ const App = () => {
         url: URL.createObjectURL(file),
         name: file?.name || 'unknown',
       }))
-
+      console.log('----->', 'files', files)
       setItems([...items, ...newItems])
     },
     [items]
@@ -71,25 +65,31 @@ const App = () => {
     <>
       <div
         onClick={() => {
-          console.log('----->', videoRef.current, items[0].url)
-          videoRef.current.src = items[0].url
-          videoRef.current.play()
-        }}
-      >
-        <PlayIcon className={classes.PlaybackButton} />
-      </div>
-      <div
-        onClick={() => {
-          console.log('----->', videoRef.current, items[0].url)
-          videoRef.current.src = items[1].url
-          videoRef.current.play()
+          const images = document.querySelectorAll('[class^=VideoItem-')
+          console.log('----->', 'dd', images)
+          let prevRatio
+
+          const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.intersectionRatio > prevRatio) {
+                console.log('----->', 'da')
+              } else {
+                console.log('----->', 'net')
+              }
+
+              prevRatio = entry.intersectionRatio
+            })
+          })
+
+          images.forEach(image => {
+            observer.observe(image)
+          })
         }}
       >
         <PlayIcon className={classes.PlaybackButton} />
       </div>
       <div className={classes.App}>
         <div className={classes.Present}>
-          <Drop onDrop={handleDrop} />
           <video
             controls={true}
             crossOrigin='anonymous'
@@ -101,22 +101,19 @@ const App = () => {
             Sorry, your browser support embedded videos, but dworry, you can{' '}
             <a href='https://archive.org/details/BigBuckBunny_124'>download it</a>
             and watch it with your favorite video player!
-          </video>
-        </div>
-        <div className={classes.Timeline}>
-          <div className={classes.Timeline_Scale}>
-            {Array(10)
-              .fill()
-              .map((item, idx) => (
-                <time key={idx}>00:00</time>
-              ))}
-          </div>
-          <div className={classes.Timeline_Content}>
-            {items.map(({ id, url, name }) => (
-              <VideoItem name={name} url={url} key={id} />
-            ))}
+          </video>{' '}
+          <div
+            onClick={() => {
+              console.log('----->', videoRef.current, items[0].url)
+              videoRef.current.src = items[0].url
+              videoRef.current.play()
+            }}
+          >
+            <PlayIcon className={classes.PlaybackButton} />
           </div>
         </div>
+        <Timeline items={items} />
+        <Drop onDrop={handleDrop} />
       </div>
     </>
   )

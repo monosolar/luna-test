@@ -5,43 +5,45 @@ import classnames from 'classnames'
 
 const useStyles = createUseStyles({
   Drop: {
-    backgroundColor: 'white',
+    backgroundColor: '#3E2C41',
     width: '100%',
-    height: '100%',
-    position: 'absolute',
-    left: 0,
-    top: 0,
+    height: '6rem',
+
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: '.5rem',
 
-    border: '10px dashed',
     borderCollapse: 'separate',
     boxSizing: 'border-box',
+    color: '#6E85B2',
 
-    opacity: 0,
+    fontSize: '1.5rem',
   },
-  Drop__dragOvered: {
-    opacity: 1,
+  Drop_Header: {
+    width: '100%',
+    height: '100%',
+    border: '.2rem dashed',
+
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
 const Drop = ({ onDrop }) => {
   const classes = useStyles()
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: 'video/*',
     noClick: true,
   })
 
   return (
-    <div
-      className={classnames(classes.Drop, { [classes.Drop__dragOvered]: isDragActive })}
-      {...getRootProps()}
-    >
+    <div className={classes.Drop} {...getRootProps()}>
       <input {...getInputProps()} />
-      <p>Drop the files here ...</p>
+      <div className={classnames(classes.Drop_Header)}>Drop the files here ...</div>
     </div>
   )
 }
