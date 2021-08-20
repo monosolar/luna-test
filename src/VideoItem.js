@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
+import { PIXELS_PER_SECOND } from './consts'
 import Storyboard from './Storyboard'
 
 const useStyles = createUseStyles(() => {
@@ -77,8 +78,9 @@ const VideoItem = ({ name, url, initLeft = 0, onMove = () => {} }) => {
     }
   }
 
-  const handleDuration = (duration) => {
-    thisRef.current.style.width = `${duration * 100}px`
+  const handleDuration = duration => {
+    console.log('----->', 'duration--', duration)
+    thisRef.current.style.width = `${duration * PIXELS_PER_SECOND}px`
     onMove()
   }
 

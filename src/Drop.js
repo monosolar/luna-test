@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useDropzone } from 'react-dropzone'
 import classnames from 'classnames'
+import { AppContext } from './AppProvider'
 
 const useStyles = createUseStyles({
   Drop: {
@@ -31,11 +32,25 @@ const useStyles = createUseStyles({
   },
 })
 
-const Drop = ({ onDrop }) => {
+const Drop = () => {
   const classes = useStyles()
+  const { items, setItems } = useContext(AppContext)
+
+  const handleDrop = useCallback(
+    files => {
+      const newItems = files.map(file => ({
+        id: new Date().getTime(),
+        url: URL.createObjectURL(file),
+        name: file?.name || 'unknown',
+      }))
+      console.log('----->', 'files', files)
+      setItems([...items, ...newItems])
+    },
+    [items]
+  )
 
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
+    onDrop: handleDrop,
     accept: 'video/*',
     noClick: true,
   })

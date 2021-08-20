@@ -1,9 +1,7 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useContext, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
-import AppContext from './AppContext'
+import { AppContext } from './AppProvider'
 import ControllButton from './ControllButton'
-import Drop from './Drop'
-import Timeline from './Timeline'
 
 const useStyles = createUseStyles({
   Player: {
@@ -18,29 +16,12 @@ const useStyles = createUseStyles({
   Player_Video: {
     width: '100%',
   },
-
-  PlaybackButton: {
-    cursor: 'pointer',
-    width: '2rem',
-    height: '2rem',
-    '& path': {
-      fill: '#6E85B2',
-    },
-    margin: '1rem',
-  },
-
-  App: {
-    maxWidth: '70rem',
-    width: '100%',
-    margin: '2rem auto auto auto',
-    position: 'relative',
-  },
 })
 
 const Player = () => {
   const classes = useStyles()
   const videoRef = useRef(null)
-  //const {} = useContext(AppContext)
+  const { setIsPlaying, isPlaying, duration } = useContext(AppContext)
 
   return (
     <div className={classes.Player}>
@@ -53,10 +34,10 @@ const Player = () => {
         width='620'
       />
       <ControllButton
-        onPlay={() => {
-          // console.log('----->', videoRef.current, items[0].url)
-          // videoRef.current.src = items[0].url
-          // videoRef.current.play()
+        disabled={duration === 0}
+        isPlaying={isPlaying}
+        onClick={() => {
+          setIsPlaying(!isPlaying)
         }}
       />
     </div>

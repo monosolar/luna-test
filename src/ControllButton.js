@@ -1,3 +1,4 @@
+import classnames from 'classnames'
 import React from 'react'
 import { createUseStyles } from 'react-jss'
 import { ReactComponent as PlayIcon } from './play.svg'
@@ -13,22 +14,27 @@ const useStyles = createUseStyles({
     },
     margin: '1rem',
   },
+
+  ControllButton__disabled: {
+    opacity: 0.5,
+  },
 })
 
-const ControllButton = ({ onPlay = () => {}, onPause = () => {}, isPlay = true }) => {
+const ControllButton = ({ onClick = () => {}, isPlaying = true, disabled = false }) => {
   const classes = useStyles()
 
-  const handleClick = () => {
-    isPlay ? onPlay() : onPause()
-  }
-
   return (
-    <div onClick={handleClick}>
-      {isPlay ? (
-        <PlayIcon className={classes.PlaybackButton} />
-      ) : (
-        <StopIcon className={classes.PlaybackButton} />
-      )}
+    <div
+      className={classnames(classes.ControllButton, {
+        [classes.ControllButton__disabled]: disabled,
+      })}
+      onClick={() => {
+        if (!disabled) {
+          onClick()
+        }
+      }}
+    >
+      {isPlaying ? <StopIcon /> : <PlayIcon />}
     </div>
   )
 }

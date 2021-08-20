@@ -1,56 +1,42 @@
 import React, { useEffect, useState } from 'react'
 
 export const AppContext = React.createContext()
-/*
 
-value={(() => {
-    let duration = 0
-    let currentTime = 0
-    let isPlaying = false
-
-    const onDurationChange = value => {
-      duration = value
-    }
-
-    const onPlay = () => {
-      isPlaying = true
-    }
-
-    const onPause = () => {
-      isPlaying = false
-    }
-
-    
-
-    return { interval, onDurationChange, onPlay, onPause }
-  })()}
-  */
+const TICK_STEP = 0.1
 
 const AppProvider = ({ children }) => {
   const [currentTime, setCurrentTime] = useState(0)
+  const [curentUrl, setCurentUrl] = useState('')
   const [duration, setDuration] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [items, setItems] = useState([])
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isPlaying) {
-        setCurrentTime(currentTime + 100)
+        setCurrentTime(currentTime + TICK_STEP)
 
-        console.log('----->', 'tick', )
+        console.log('----->', 'tick', currentTime, duration)
 
         if (currentTime > duration) {
           setCurrentTime(0)
         }
       }
-    }, 1000)
+    }, 1000 * TICK_STEP)
     return () => clearInterval(interval)
-  }, [])
+  }, [isPlaying, currentTime, duration])
 
   return (
     <AppContext.Provider
       value={{
+        duration,
+        setDuration,
         isPlaying,
-        setDuration
+        setIsPlaying,
+        items,
+        setItems,
+        curentUrl,
+        currentTime,
       }}
     >
       {children}{' '}

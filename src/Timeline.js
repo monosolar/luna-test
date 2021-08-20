@@ -1,15 +1,12 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
-import { useResizeDetector } from 'react-resize-detector'
-import AppContext from './AppContext'
+import { AppContext } from './AppProvider'
+
 import { PIXELS_PER_SECOND } from './consts'
 
-import Storyboard from './Storyboard'
 import VideoItem from './VideoItem'
 
 const useStyles = createUseStyles(() => {
-  const borderRadius = '.5rem'
-
   return {
     Timeline: {
       backgroundColor: '#5C527F',
@@ -21,11 +18,7 @@ const useStyles = createUseStyles(() => {
       position: 'relative',
       height: '10rem',
     },
-    Timeline_Scale: {
-      '& time': {
-        marginRight: '1rem',
-      },
-    },
+
     Slider: {
       position: 'absolute',
       top: 0,
@@ -55,6 +48,13 @@ const useStyles = createUseStyles(() => {
 const Slider = () => {
   const classes = useStyles()
   const thisRef = useRef(null)
+  const { currentTime } = useContext(AppContext)
+
+  useEffect(() => {
+    if (thisRef.current) {
+      thisRef.current.style.left = `${currentTime * PIXELS_PER_SECOND}px`
+    }
+  }, [currentTime])
 
   return (
     <div className={classes.Slider} ref={thisRef}>
@@ -64,20 +64,13 @@ const Slider = () => {
   )
 }
 
-const Timeline = ({ items }) => {
+const Timeline = () => {
   const classes = useStyles()
   const thisRef = useRef(null)
-  const { setDuration } = useContext(AppContext)
+  const { items, setDuration } = useContext(AppContext)
 
   return (
     <div className={classes.Timeline} ref={thisRef}>
-      <div className={classes.Timeline_Scale}>
-        {Array(10)
-          .fill()
-          .map((item, idx) => (
-            <time key={idx}>00:00</time>
-          ))}
-      </div>
       <div className={classes.Timeline_Content}>
         {items.map(({ id, url, name }, idx) => (
           <VideoItem
