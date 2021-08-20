@@ -1,22 +1,7 @@
 import React, { useContext, useRef } from 'react'
-import { createUseStyles } from 'react-jss'
 import { AppContext } from '@components/App/AppProvider'
 import ControllButton from '@components/ControllButton'
-
-const useStyles = createUseStyles({
-  Player: {
-    position: 'relative',
-    background: 'linear-gradient(#5C527F, #3E2C41)',
-    minHeight: '40rem',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  Player_Video: {
-    width: '100%',
-  },
-})
+import useStyles from './style'
 
 const Player = () => {
   const classes = useStyles()
@@ -32,7 +17,6 @@ const Player = () => {
         poster='https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217'
         src={curentUrl}
         autoPlay={true}
-        controls={true}
       />
       <ControllButton
         disabled={duration === 0}

@@ -1,19 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { createUseStyles } from 'react-jss'
-
-const useStyles = createUseStyles({
-  Storyboard_Video: {
-    display: 'none',
-    height: '100%',
-  },
-  Storyboard_Canvas: {
-    display: 'none',
-    height: '100%',
-  },
-  Storyboard_Image: {
-    height: '100%',
-  },
-})
+import useStyles from './style'
 
 const Storyboard = ({ url, onDuration = () => {} }) => {
   const classes = useStyles()

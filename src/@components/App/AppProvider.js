@@ -1,4 +1,4 @@
-import { PIXELS_PER_SECOND } from 'consts'
+import { PIXELS_PER_SECOND } from '@common/consts'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 export const AppContext = React.createContext()

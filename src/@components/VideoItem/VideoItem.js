@@ -1,57 +1,9 @@
-
 import { AppContext } from '@components/App/AppProvider'
-import React, { useContext, useEffect, useRef } from 'react'
-import { createUseStyles } from 'react-jss'
-import { getRectRelativeToParent } from 'utils'
-import { PIXELS_PER_SECOND } from '../../consts'
-import Storyboard from '../../Storyboard'
-
-const useStyles = createUseStyles(() => {
-  const borderRadius = '.5rem'
-
-  return {
-    VideoItem: {
-      position: 'absolute',
-      top: '1rem',
-      bottom: '1rem',
-      left: ({ initLeft }) => initLeft,
-      background: '#261C2C',
-
-      boxSizing: 'border-box',
-      borderRadius,
-
-      padding: '.75rem',
-
-      display: 'flex',
-      justifyContent: 'space-between',
-
-      '-webkit-touch-callout': 'none',
-      '-webkit-user-select': 'none',
-      '-khtml-user-select': 'none',
-      '-moz-user-select': 'none',
-      '-ms-user-select': 'none',
-      'user-select': 'none',
-    },
-
-    VideoItem_Curtain: {
-      width: '100%',
-      height: '100%',
-      position: 'absolute',
-
-      top: 0,
-      left: 0,
-      borderRadius,
-      background: `linear-gradient(90deg, white 0, transparent 10rem, transparent 100%),
-                   linear-gradient(270deg, white 0, transparent 10rem, transparent 100%)`,
-    },
-
-    VideoItem_Name: {
-      position: 'absolute',
-      top: '0.5rem',
-      left: '1rem',
-    },
-  }
-})
+import React, { useContext, useRef } from 'react'
+import { getRectRelativeToParent } from '@common/utils'
+import { PIXELS_PER_SECOND } from '@common/consts'
+import Storyboard from '@components/Storyboard'
+import useStyles from './style'
 
 const VideoItem = ({ id, name, url, initLeft = 0 }) => {
   const classes = useStyles({ initLeft })

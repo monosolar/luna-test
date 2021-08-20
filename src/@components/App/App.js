@@ -1,31 +1,41 @@
-import React, { useCallback, useState } from 'react'
-import { createUseStyles } from 'react-jss'
-import Drop from '../../Drop'
-import Player from '../../Player'
-import Timeline from '../../Timeline'
-import AppProvider from './AppProvider'
-
-const useStyles = createUseStyles({
-  App: {
-    maxWidth: '70rem',
-    width: '100%',
-    margin: '2rem auto auto auto',
-    position: 'relative',
-  },
-})
+import classNames from 'classnames'
+import React, { useCallback, useContext } from 'react'
+import { useDropzone } from 'react-dropzone'
+import Player from '@components/Player'
+import Timeline from '@components/Timeline'
+import { AppContext } from './AppProvider'
+import useStyles from './style'
 
 const App = () => {
   const classes = useStyles()
+  const { items, setItems } = useContext(AppContext)
 
+  const handleDrop = useCallback(
+    files => {
+      const newItems = files.map(file => ({
+        id: `${new Date().getTime()}`,
+        url: URL.createObjectURL(file),
+        name: file?.name || 'unknown',
+      }))
+      setItems([...items, ...newItems])
+    },
+    [setItems, items]
+  )
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handleDrop,
+    accept: 'video/*',
+    noClick: true,
+  })
 
   return (
-    <AppProvider>
-      <div className={classes.App}>
-        <Player />
-        <Timeline />
-        <Drop />
-      </div>
-    </AppProvider>
+    <div
+      className={classNames(classes.App, { [classes.App_dd]: isDragActive })}
+      {...getRootProps()}
+    >
+      <input {...getInputProps()} />
+      <Player />
+      <Timeline />
+    </div>
   )
 }
 
