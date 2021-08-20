@@ -5,13 +5,14 @@ const Storyboard = ({ url, onDuration = () => {} }) => {
   const classes = useStyles()
   const canvasRef = useRef(null)
   const videoRef = useRef(null)
-  const mutableDataRef = useRef({ videoStep: 1 })
+  const dataRef = useRef({ captureStep: 1 })
 
   const [images, setImages] = useState([])
 
   const handleSeeked = () => {
     const canvas = canvasRef.current
     const video = videoRef.current
+    const captureStep = dataRef.current.captureStep
 
     const ctx = canvas.getContext('2d')
 
@@ -20,7 +21,7 @@ const Storyboard = ({ url, onDuration = () => {} }) => {
     setImages([...images, canvas.toDataURL('image/png')])
 
     if (video.currentTime < video.duration) {
-      setCurrentTime(video.currentTime + mutableDataRef.current.videoStep)
+      setCurrentTime(video.currentTime + captureStep)
     }
   }
   const setCurrentTime = value => {
@@ -36,11 +37,7 @@ const Storyboard = ({ url, onDuration = () => {} }) => {
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
 
-    console.log('----->', 'onLoadedData')
-    const ratio = video.videoWidth / video.videoHeight
-
-    // 128 + 50
-    mutableDataRef.current.videoStep = 2
+    dataRef.current.captureStep = video.duration / 8
     onDuration(video.duration)
     setCurrentTime(0)
   }
@@ -56,9 +53,9 @@ const Storyboard = ({ url, onDuration = () => {} }) => {
         crossOrigin='anonymous'
         src={url}
       />
-      {/* {images.map(image => (
+      {images.map(image => (
         <img className={classes.Storyboard_Image} src={image} key={image} />
-      ))} */}
+      ))}
     </>
   )
 }
